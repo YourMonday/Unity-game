@@ -1,0 +1,197 @@
+program zadachaabsolute1;
+uses math;
+var n, i, j, curr, t, y:integer;
+  zn, znc:char;
+  massiv1:array of integer;
+  B, C:array of integer;
+  str1: string;
+  Bchek, Check: boolean;
+  v:integer;
+  tree, dva:boolean;
+  summikB, sredB, summikC, sredC:real;
+  valerka: integer;
+begin
+
+  while True do begin
+  //inzialization
+    n:=0;
+    t:=1;
+    i:=1;
+    v:=0;
+    y:=1;
+    sredC:=1;
+    summikB:=0;
+    summikC:=0;
+    sredB:=0;
+    setlength(B, 150);
+    setlength(C, 150);
+    for i:=1 to t do begin
+        B[i]:=0;
+    end;
+    for i:=1 to y do begin
+        C[i]:=0;
+    end;
+    Bchek:=False;
+    Check:=False;
+    tree:=false;
+    dva:=false;
+
+    //Menu
+    randomize();
+    writeln();
+    writeln('Начало - 1');
+    writeln('Конец - 2');
+    readln(zn);
+
+    while zn = '1' do begin
+    writeln('Введите число N (количество чисел)');
+
+    while (n<=2) or (n>150) do begin
+    readln(n);
+    end;
+    SetLength(massiv1,n+1);
+    //Исходный массив
+    writeln('Исходный массив: ');
+    for i:=1 to N do begin
+        massiv1[i]:= Random(6000) - 3000;
+        write(' ',massiv1[i], ' ');
+    end;
+
+    //Пузырек
+    for i:=1 to n-1 do begin
+    for j:=1 to n-i do begin
+        if (massiv1[j]<massiv1[j+1]) then begin
+           curr:=massiv1[j];
+           massiv1[j]:=massiv1[j+1];
+           massiv1[j+1]:= curr;
+        end;
+    end;
+    end;
+
+    writeln();
+    writeln('Отсортированный массив :');
+    for i:=1 to N do begin
+        write(' ',massiv1[i], ' ');
+    end;
+    //Массив где индекс 2
+    writeln();
+    while (v<=0) or (v>n) do begin
+    writeln('Введите индекс массива, с которым поменять 2 минимальный элемент');
+    readln(v);
+    end;
+
+
+    for i:=1 to N do begin
+       if (i=n-1) then begin
+          curr:=massiv1[i];
+          massiv1[i]:= massiv1[v];
+          massiv1[v]:=curr;
+          writeln();
+       end;
+    end;
+
+    writeln('Массив поменявшийся местами:');
+    for i:=1 to N do begin
+       write(' ',massiv1[i], ' ');
+    end;
+
+    // Массив B
+    for i:=1 to N do begin
+        str(abs(massiv1[i]), str1);
+         if (str1[1]='5') then begin
+         B[t]:=massiv1[i];
+         inc(t);
+         Bchek:=True;
+         end;
+    end;
+
+    if Bchek=true then begin
+    setlength(B, t);
+    writeln();
+    writeln();
+    write('Массив B: ');
+    for i:=1 to t-1 do begin
+        write(' ',B[i], ' ');
+    end;
+    end
+    else begin
+    writeln();
+    writeln();
+    writeln('Ни один элемент не имеет начало с 5 (Не существует B)');
+    end;
+
+    //Массив C
+
+    for i:=1 to n do begin
+       str(massiv1[i], str1);
+       tree:=False;
+       dva:=False;
+       //Проверка на 2 и 3
+       for j:=1 to length(str1) do begin
+           if (str1[j] = '3') then begin
+           tree:=True;
+           end;
+           if (str1[j] = '2') then begin
+           dva:=True;
+           end;
+       end;
+       //Присвоение к индексу C
+       if (dva=true) and (tree=true) then begin
+       C[y]:=massiv1[i];
+       inc(y);
+       Check:=true;
+       end;
+    end;
+
+    if Check=true then begin
+    setlength(C, y);
+    writeln();
+    write('Массив C: ');
+    for i:=1 to y-1 do begin
+        write(' ',C[i], ' ');
+    end;
+
+    end
+    else begin
+    writeln();
+    writeln();
+    writeln('Ни один элемент не имеет 2 и 3 (Не существует C)');
+    end;
+
+    //сумма B
+    if (Bchek=true) then begin
+      for i:=1 to t-1 do begin
+      summikB:= summikB + B[i];
+      sredB:=sredB + B[i];
+      end;
+      sredB:= sredB/(t-1);
+      summikB:=summikB/sredB;
+      writeln();
+      writeln('Сумма B + деленное на среднее арифмитическое ', summikB:3:3);
+    end;
+    // сумма C
+    if (Check=true) then begin
+      for i:=1 to y-1 do begin
+      summikC:= summikC + C[i];
+      sredC:=sredC * C[i];
+      end;
+      if (summikC>=0) then begin
+      sredC:= power(sredC, 1/(y-1));
+      summikC:=summikC/sredC;
+      writeln();
+      writeln('Сумма C + деленное на среднее геометрическое ', summikC:3:3);
+      end
+      else begin
+      writeln('Корень суммы C отрицательный');
+      end;
+      end;
+
+
+
+    zn:='0';
+    end;
+    while zn='2' do begin
+    exit;
+    end;
+  end;
+end.
